@@ -52,12 +52,41 @@ const promisifiedWriteFile=(file,txt)=>{
 
 const getDogImage=async()=>{
     try{
-    const data=await promisifiedReadFile(`${__dirname}/dog.txt`)
+    const data=await promisifiedReadFile(`${__dirname}/doog.txt`)
     const image=await superagent.get(`https://dog.ceo/api/breed/${data}/images/random`)
     await promisifiedWriteFile("dog-image-2.txt",image.body.message)
+    return image.body.message
+    }catch(err){
+        console.log(err)
+        throw(err)
+    }
+}
+// console.log("1")
+// const result=getDogImage()
+// console.log(result)
+// console.log("2")
+
+//getting value from async function
+
+//1.using then-catch
+// console.log("1")
+// getDogImage().then(data=>{
+//     console.log(data)
+//     console.log("3")
+// }).catch(err=>{
+//     console.log(err)
+// })
+
+//2. using IIFE async function
+(async()=>{
+    try{
+
+    
+ console.log("1")
+ const result=await getDogImage()
+ console.log(result)
+ console.log("3")
     }catch(err){
         console.log(err)
     }
-}
-
-getDogImage()
+})()
