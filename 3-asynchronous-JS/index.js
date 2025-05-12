@@ -36,14 +36,28 @@ const promisifiedWriteFile=(file,txt)=>{
     })
 }
 
-promisifiedReadFile(`${__dirname}/dog.txt`).then(data=>{
-    return superagent.get(`https://dog.ceo/api/breed/${data}/images/random`)
-}).then(data=>{
-    return promisifiedWriteFile("dog-image-2.txt",data.body.message)
-}).then(data=>{
-    console.log(data)
-})
-.catch(err=>{
-    console.log(err)
-})
+// promisifiedReadFile(`${__dirname}/dog.txt`).then(data=>{
+//     return superagent.get(`https://dog.ceo/api/breed/${data}/images/random`)
+// }).then(data=>{
+//     return promisifiedWriteFile("dog-image-2.txt",data.body.message)
+// }).then(data=>{
+//     console.log(data)
+// })
+// .catch(err=>{
+//     console.log(err)
+// })
 
+
+//3.using async/await and try/catch
+
+const getDogImage=async()=>{
+    try{
+    const data=await promisifiedReadFile(`${__dirname}/dog.txt`)
+    const image=await superagent.get(`https://dog.ceo/api/breed/${data}/images/random`)
+    await promisifiedWriteFile("dog-image-2.txt",image.body.message)
+    }catch(err){
+        console.log(err)
+    }
+}
+
+getDogImage()
