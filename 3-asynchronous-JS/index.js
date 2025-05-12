@@ -50,17 +50,17 @@ const promisifiedWriteFile=(file,txt)=>{
 
 //3.using async/await and try/catch
 
-const getDogImage=async()=>{
-    try{
-    const data=await promisifiedReadFile(`${__dirname}/doog.txt`)
-    const image=await superagent.get(`https://dog.ceo/api/breed/${data}/images/random`)
-    await promisifiedWriteFile("dog-image-2.txt",image.body.message)
-    return image.body.message
-    }catch(err){
-        console.log(err)
-        throw(err)
-    }
-}
+// const getDogImage=async()=>{
+//     try{
+//     const data=await promisifiedReadFile(`${__dirname}/dog.txt`)
+//     const image=await superagent.get(`https://dog.ceo/api/breed/${data}/images/random`)
+//     await promisifiedWriteFile("dog-image-2.txt",image.body.message)
+//     return image.body.message
+//     }catch(err){
+//         console.log(err)
+//         throw(err)
+//     }
+// }
 // console.log("1")
 // const result=getDogImage()
 // console.log(result)
@@ -78,15 +78,36 @@ const getDogImage=async()=>{
 // })
 
 //2. using IIFE async function
-(async()=>{
-    try{
+// (async()=>{
+//     try{
 
     
- console.log("1")
- const result=await getDogImage()
- console.log(result)
- console.log("3")
-    }catch(err){
-        console.log(err)
-    }
-})()
+//  console.log("1")
+//  const result=await getDogImage()
+//  console.log(result)
+//  console.log("3")
+//     }catch(err){
+//         console.log(err)
+//     }
+// })()
+
+//waiting for multiple promises simultinously
+const getDogPic=async()=>{
+try {  const data=await promisifiedReadFile(`${__dirname}/dog.txt`)
+   const pic1= superagent.get(`https://dog.ceo/api/breed/${data}/images/random`)
+   const pic2= superagent.get(`https://dog.ceo/api/breed/${data}/images/random`)
+   const pic3= superagent.get(`https://dog.ceo/api/breed/${data}/images/random`)
+   const promises=await Promise.all([pic1,pic2,pic3])
+   const images=promises.map(el=>el.body.message)
+   await promisifiedWriteFile("dog-images.txt",images.join("\n"))
+   return images
+}catch(err){
+    console.log(err)
+    throw(err)
+}
+}
+getDogPic().then(data=>{
+    console.log(data)
+}).catch(err=>{
+    console.log(err)
+})
