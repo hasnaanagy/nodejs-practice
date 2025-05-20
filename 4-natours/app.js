@@ -1,10 +1,13 @@
 const fs=require('fs')
 const express=require('express')
 const app=express()
-app.use(express.json())
-const tours=JSON.parse(fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`))
 
-app.get('/api/v1/tours',(req,res)=>{
+//1-Middle wares
+app.use(express.json())
+
+//2-Route Handllers
+const tours=JSON.parse(fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`))
+const getTours=(req,res)=>{
  res.status(200).json({
     status:"success",
     results:tours.length,
@@ -12,9 +15,9 @@ app.get('/api/v1/tours',(req,res)=>{
     tours
 }
 })
-})
+}
 
-app.post('/api/v1/tours',(req,res,)=>{
+const createTour=(req,res,)=>{
     const newId=tours[tours.length-1].id +1
     const newTour=Object.assign({id:newId},req.body)
     console.log(newTour)
@@ -28,9 +31,9 @@ app.post('/api/v1/tours',(req,res,)=>{
     })
     })
    
-})
+}
 
-app.get('/api/v1/tours/:id',(req,res)=>{
+const getTourById=(req,res)=>{
  if(req.params.id*1>tours.length){
     return res.status(404).json({
         status:'Fail',
@@ -44,9 +47,9 @@ app.get('/api/v1/tours/:id',(req,res)=>{
         tour
     }
  })
-})
+}
 
-app.patch('/api/v1/tours/:id',(req,res)=>{
+const updateTour=(req,res)=>{
      if(req.params.id*1>tours.length){
     return res.status(404).json({
         status:'Fail',
@@ -60,9 +63,9 @@ app.patch('/api/v1/tours/:id',(req,res)=>{
         tour:'updated tour'
     }
  })
-})
+}
 
-app.delete('/api/v1/tours/:id',(req,res)=>{
+const deleteTour=(req,res)=>{
      if(req.params.id*1>tours.length){
     return res.status(404).json({
         status:'Fail',
@@ -74,8 +77,14 @@ app.delete('/api/v1/tours/:id',(req,res)=>{
     status:'success',
     data:null
  })
-})
+}
 
+//3-ROUTES
+app.route('/api/v1/tours').get(getTours).post(createTour)
+app.route('/api/v1/tours/:id').get(getTourById).patch(updateTour).delete(deleteTour)
+
+
+//4-STARTING SERVER
 const port=3000
 app.listen(port,(err)=>{
     console.log('Listening on port 3000 ...')
