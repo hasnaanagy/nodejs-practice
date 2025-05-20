@@ -5,9 +5,19 @@ const app=express()
 //1-Middle wares
 app.use(express.json())
 
+app.use((req,res,next)=>{
+console.log('Hello From My Middleware')
+next()
+})
+
+app.use((req,res,next)=>{
+    req.requestTime=new Date().toISOString()
+    next()
+})
 //2-Route Handllers
 const tours=JSON.parse(fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`))
 const getTours=(req,res)=>{
+    console.log(req.requestTime)
  res.status(200).json({
     status:"success",
     results:tours.length,
