@@ -92,9 +92,47 @@ const deleteTour=(req,res)=>{
  })
 }
 
+const getUsers=(req,res)=>{
+    res.status(500).json({
+        status:"Error",
+        message:'This Route Not Yet Implemented'
+    })
+}
+
+const getUserById=(req,res)=>{
+    res.status(500).json({
+        status:"Error",
+        message:'This Route Not Yet Implemented'
+    })
+}
+const createUser=(req,res)=>{
+    res.status(500).json({
+        status:"Error",
+        message:'This Route Not Yet Implemented'
+    })
+}
+
+const updateUser=(req,res)=>{
+    res.status(500).json({
+        status:"Error",
+        message:'This Route Not Yet Implemented'
+    })
+}
+
+const deleteUser=(req,res)=>{
+    res.status(500).json({
+        status:"Error",
+        message:'This Route Not Yet Implemented'
+    })
+}
+
 //3-ROUTES
 app.route('/api/v1/tours').get(getTours).post(createTour)
 app.route('/api/v1/tours/:id').get(getTourById).patch(updateTour).delete(deleteTour)
+
+app.route('/api/v1/users').get(getUsers).post(createUser)
+app.route('/api/v1/users/:id').get(getUserById).patch(updateUser).delete(deleteUser)
+
 
 
 //4-STARTING SERVER
