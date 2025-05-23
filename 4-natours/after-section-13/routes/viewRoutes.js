@@ -15,13 +15,13 @@ router.get(
   '/my-tours',
   bookingController.createBookingCheckout,
   authController.protect,
-  viewsController.getMyTours
+  viewsController.getMyTours,
 );
 
 router.post(
   '/submit-user-data',
   authController.protect,
-  viewsController.updateUserData
+  viewsController.updateUserData,
 );
 
 module.exports = router;
