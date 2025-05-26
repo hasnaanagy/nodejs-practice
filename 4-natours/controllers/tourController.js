@@ -7,13 +7,10 @@ exports.top5Cheap=(req,res,next)=>{
     next()
 }
 
-
 exports.getTours =async (req, res) => {
 try{
-
- const featurs=new APIFeaturs(Tour.find(),req.query).filter().sort().limitFields().paginate()
-  const tours=await featurs.query
-
+let featurs=new APIFeaturs(Tour.find(),req.query).filter().sort().limitFields().paginate()
+const tours=await featurs.query
 res.status(200).json({
     status:"success",
     results:tours.length,
@@ -98,3 +95,46 @@ res.status(404).json({
 })
 }
 };
+
+exports.getTourStats=async(req,res)=>{
+   try{
+     const stats=await Tour.aggregate([
+        {
+            $match:{ratingsAverage:{$gte:4.5}}
+        },
+        {
+            $group:{
+                _id:{$toUpper:'$difficulty'},
+                numTours:{$sum:1},
+                numRatings:{$sum:'$ratingsQuantity'},
+                avgRatings:{$avg:'$ratingsAverage'},
+                avgPrice:{$avg:'$price'},
+                minPrice:{$min:'$price'},
+                 maxPrice:{$max:'$price'}
+            }
+        },{
+            $sort:{
+            ratingsAverage:1    
+            }
+        },
+        {
+            $match:{
+                _id:{$ne:'EASY'}
+            }
+        }
+    ])
+
+    res.status(200).json({
+        status:'success',
+        data:{
+            stats
+        }
+    })
+   }catch(err){
+   res.status(400).json({
+        status:'fail',
+        message:err
+    })
+   }
+}
+

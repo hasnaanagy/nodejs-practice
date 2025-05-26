@@ -15,11 +15,3 @@ app.use('/api/v1/users', userRouter);
 
 module.exports = app;
 
-// app.use((req, res, next) => {
-//   console.log('Hello From My Middleware');
-//   next();
-// });
-
-//3-ROUTES
-
-
